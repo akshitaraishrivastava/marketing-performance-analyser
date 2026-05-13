@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Marketing Performance Analyzer — Akshita Rai</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f9f8f5;
+    --surface: #ffffff;
+    --surface2: #f2f1ed;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.18);
+    --text: #1a1a18;
+    --text2: #6b6b67;
+    --text3: #9e9e99;
+    --accent: #1a1a18;
+    --green: #3B6D11;
+    --green-bg: #EAF3DE;
+    --red: #A32D2D;
+    --red-bg: #FCEBEB;
+    --amber: #854F0B;
+    --amber-bg: #FAEEDA;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #131312;
+      --surface: #1e1e1c;
+      --surface2: #272725;
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.14);
+      --text: #f0ede8;
+      --text2: #a0a09a;
+      --text3: #636360;
+      --green: #C0DD97;
+      --green-bg: #173404;
+      --red: #F7C1C1;
+      --red-bg: #501313;
+      --amber: #FAC775;
+      --amber-bg: #412402;
+    }
+  }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 0.5px solid var(--border);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .logo {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .logo span {
+    color: var(--text2);
+    font-weight: 400;
+  }
+
+  .tag {
+    font-size: 11px;
+    color: var(--text2);
+    background: var(--surface2);
+    border: 0.5px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .hero {
+    margin-bottom: 2.5rem;
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--text2);
+    line-height: 1.6;
+    max-width: 520px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .inputs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .input-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    transition: border-color 0.15s;
+  }
+
+  .input-card:focus-within {
+    border-color: var(--border2);
+  }
+
+  .input-card label {
+    display: block;
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  .input-card input,
+  .input-card select {
+    width: 100%;
+    font-size: 15px;
+    font-family: inherit;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .input-card select {
+    cursor: pointer;
+    -webkit-appearance: none;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.6;
+    transition: border-color 0.15s;
+    margin-bottom: 1rem;
+  }
+
+  textarea:focus { outline: none; border-color: var(--border2); }
+  textarea::placeholder { color: var(--text3); }
+
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  button {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border2);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: transparent;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  button:hover { background: var(--surface2); }
+  button:active { transform: scale(0.98); }
+
+  button.primary {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  button.primary:hover { opacity: 0.88; }
+
+  button.ghost {
+    color: var(--text2);
+    border-color: var(--border);
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+
+  .metric-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  .metric-value {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .metric-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .badge-good { background: var(--green-bg); color: var(--green); }
+  .badge-warn { background: var(--amber-bg); color: var(--amber); }
+  .badge-bad  { background: var(--red-bg);   color: var(--red);   }
+
+  .ai-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ai-card-header {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ai-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+    display: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  #aiText {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+
+  .divider {
+    height: 0.5px;
+    background: var(--border);
+    margin: 2.5rem 0;
+  }
+
+  .built-by {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text3);
+    margin-top: 3rem;
+  }
+
+  .built-by a {
+    color: var(--text2);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .built-by a:hover { color: var(--text); }
+
+  #metricsSection { display: none; }
+  #aiSection { display: none; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <a href="#" class="logo">performance analyzer <span>by Akshita Rai</span></a>
+  <span class="tag">powered by Claude</span>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Marketing performance analyzer</h1>
+    <p class="subtitle">Paste in your campaign numbers. Get calculated metrics and AI-powered recommendations on what to do next.</p>
+  </div>
+
+  <p class="section-label">campaign inputs</p>
+  <div class="inputs-grid">
+    <div class="input-card">
+      <label for="channel">channel</label>
+      <select id="channel">
+        <option>Meta Ads</option>
+        <option>TikTok Ads</option>
+        <option>Email</option>
+        <option>Google Ads</option>
+        <option>SMS</option>
+        <option>Organic Social</option>
+        <option>Display</option>
+      </select>
+    </div>
+    <div class="input-card">
+      <label for="spend">spend (€)</label>
+      <input type="number" id="spend" placeholder="2500" />
+    </div>
+    <div class="input-card">
+      <label for="impressions">impressions</label>
+      <input type="number" id="impressions" placeholder="85000" />
+    </div>
+    <div class="input-card">
+      <label for="clicks">clicks</label>
+      <input type="number" id="clicks" placeholder="1200" />
+    </div>
+    <div class="input-card">
+      <label for="conversions">conversions</label>
+      <input type="number" id="conversions" placeholder="48" />
+    </div>
+    <div class="input-card">
+      <label for="revenue">revenue (€)</label>
+      <input type="number" id="revenue" placeholder="9600" />
+    </div>
+  </div>
+
+  <textarea id="context" placeholder="Optional context — campaign goal, audience segment, product, industry... e.g. 'win-back campaign targeting lapsed members, 30–45 age group, €10 bonus offer'"></textarea>
+
+  <div class="btn-row">
+    <button class="primary" onclick="analyze()">analyze with AI ↗</button>
+    <button onclick="calculate()">calculate metrics only</button>
+    <button class="ghost" onclick="clearAll()">clear</button>
+  </div>
+
+  <div id="metricsSection">
+    <p class="section-label">calculated metrics</p>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">CTR</div>
+        <div class="metric-value" id="ctr">—</div>
+        <div id="ctr-badge"></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">CPC</div>
+        <div class="metric-value" id="cpc">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">CVR</div>
+        <div class="metric-value" id="cvr">—</div>
+        <div id="cvr-badge"></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">CPA</div>
+        <div class="metric-value" id="cpa">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">ROAS</div>
+        <div class="metric-value" id="roas">—</div>
+        <div id="roas-badge"></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">CPM</div>
+        <div class="metric-value" id="cpm">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="aiSection">
+    <div class="divider"></div>
+    <div class="ai-card">
+      <div class="ai-card-header">
+        <div class="ai-dot" id="aiDot"></div>
+        AI analysis
+      </div>
+      <div id="aiText">Analyzing your campaign data...</div>
+    </div>
+  </div>
+
+  <div class="built-by">
+    built by <a href="https://www.instagram.com/akshitaraishrivastava" target="_blank">Akshita Rai</a> &middot; MSc Digital Marketing, UCD Smurfit &middot; powered by Claude API
+  </div>
+</main>
+
+<script>
+function getVals() {
+  return {
+    channel: document.getElementById('channel').value,
+    spend: parseFloat(document.getElementById('spend').value) || 0,
+    impressions: parseFloat(document.getElementById('impressions').value) || 0,
+    clicks: parseFloat(document.getElementById('clicks').value) || 0,
+    conversions: parseFloat(document.getElementById('conversions').value) || 0,
+    revenue: parseFloat(document.getElementById('revenue').value) || 0,
+    context: document.getElementById('context').value
+  };
+}
+
+function badge(id, cls, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = `<span class="metric-badge badge-${cls}">${text}</span>`;
+}
+
+function calculate() {
+  const v = getVals();
+  const ctr = v.impressions ? (v.clicks / v.impressions) * 100 : null;
+  const cpc = v.clicks ? v.spend / v.clicks : null;
+  const cvr = v.clicks ? (v.conversions / v.clicks) * 100 : null;
+  const cpa = v.conversions ? v.spend / v.conversions : null;
+  const roas = v.spend ? v.revenue / v.spend : null;
+  const cpm = v.impressions ? (v.spend / v.impressions) * 1000 : null;
+
+  document.getElementById('ctr').textContent = ctr !== null ? ctr.toFixed(2) + '%' : '—';
+  document.getElementById('cpc').textContent = cpc !== null ? '€' + cpc.toFixed(2) : '—';
+  document.getElementById('cvr').textContent = cvr !== null ? cvr.toFixed(2) + '%' : '—';
+  document.getElementById('cpa').textContent = cpa !== null ? '€' + cpa.toFixed(2) : '—';
+  document.getElementById('roas').textContent = roas !== null ? roas.toFixed(2) + 'x' : '—';
+  document.getElementById('cpm').textContent = cpm !== null ? '€' + cpm.toFixed(2) : '—';
+
+  if (ctr !== null) badge('ctr-badge', ctr >= 2 ? 'good' : ctr >= 1 ? 'warn' : 'bad', ctr >= 2 ? 'strong' : ctr >= 1 ? 'average' : 'low');
+  if (cvr !== null) badge('cvr-badge', cvr >= 3 ? 'good' : cvr >= 1.5 ? 'warn' : 'bad', cvr >= 3 ? 'strong' : cvr >= 1.5 ? 'average' : 'low');
+  if (roas !== null) badge('roas-badge', roas >= 4 ? 'good' : roas >= 2 ? 'warn' : 'bad', roas >= 4 ? 'profitable' : roas >= 2 ? 'marginal' : 'loss');
+
+  document.getElementById('metricsSection').style.display = 'block';
+  return { ctr, cpc, cvr, cpa, roas, cpm };
+}
+
+async function analyze() {
+  const v = getVals();
+  const m = calculate();
+  document.getElementById('aiSection').style.display = 'block';
+  document.getElementById('aiDot').style.display = 'block';
+  document.getElementById('aiText').textContent = 'Analyzing your campaign data...';
+
+  const prompt = `You are a senior performance marketing analyst. Analyze this campaign and give sharp, honest, actionable recommendations.
+
+Channel: ${v.channel}
+Spend: €${v.spend}
+Impressions: ${v.impressions}
+Clicks: ${v.clicks}
+Conversions: ${v.conversions}
+Revenue: €${v.revenue}
+${v.context ? 'Campaign context: ' + v.context : ''}
+
+Calculated metrics:
+${m.ctr !== null ? `CTR: ${m.ctr.toFixed(2)}%` : ''}
+${m.cpc !== null ? `CPC: €${m.cpc.toFixed(2)}` : ''}
+${m.cvr !== null ? `CVR: ${m.cvr.toFixed(2)}%` : ''}
+${m.cpa !== null ? `CPA: €${m.cpa.toFixed(2)}` : ''}
+${m.roas !== null ? `ROAS: ${m.roas.toFixed(2)}x` : ''}
+${m.cpm !== null ? `CPM: €${m.cpm.toFixed(2)}` : ''}
+
+Give your analysis in this structure:
+VERDICT
+2 sentences. Honest assessment of overall performance.
+
+BIGGEST PROBLEM
+1 sentence. The most critical issue in the data.
+
+NEXT ACTIONS
+1. [specific, implementable action]
+2. [specific, implementable action]
+3. [specific, implementable action]
+
+WATCH CLOSELY
+Name one metric and explain in one sentence why it's the most important to track right now.
+
+Be direct. No fluff. Speak like a marketer, not a consultant.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(b => b.text || '').join('') || 'No response.';
+    document.getElementById('aiText').textContent = text;
+  } catch (e) {
+    document.getElementById('aiText').textContent = 'Something went wrong. Please try again.';
+  }
+  document.getElementById('aiDot').style.display = 'none';
+}
+
+function clearAll() {
+  ['spend','impressions','clicks','conversions','revenue'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('context').value = '';
+  document.getElementById('metricsSection').style.display = 'none';
+  document.getElementById('aiSection').style.display = 'none';
+}
+</script>
+</body>
+</html>
